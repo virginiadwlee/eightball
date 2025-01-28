@@ -23,3 +23,7 @@ steps:
       scanCentralDastApiUrl: 'http://192.168.213.150:5001/api'
       scanCentralCiCdToken: 'abd8a0d8-5510-427f-a3da-69a22320c3de'
       sscCiToken: 'b5b3591f-d614-4de3-8b07-a3baed35cd07'
+
+- task: BatchScript@1
+  inputs:
+    filename: 'c:\scan_result\test.bat'
