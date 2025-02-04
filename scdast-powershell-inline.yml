@@ -22,7 +22,7 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(1)(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'ps'
+    scriptType: 'pscore'
     scriptLocation: 'inlineScript'
     inlineScript: |
       $ScanCompleted = "Complete"
