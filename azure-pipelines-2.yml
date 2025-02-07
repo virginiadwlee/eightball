@@ -58,8 +58,37 @@ steps:
       }
       while (($ScanStatus -ne $ScanCompleted) -and ($ScanStatus -ne $ScanStopped) -and ($ScanStatus -ne $ScanInterrupted))
       $critCount = $status.item.criticalCount
-      Write-Host "crit count = " $critCount 
-      
+      $highCount = $status.item.highCount
+      $mediumCount = $status.item.mediumCount
+      $lowCount = $status.item.lowCount
+
+      Write-Host "critical count = " $critCount 
+      Write-Host "high count = " $highCount 
+      Write-Host "medium count = " $mediumCount 
+      Write-Host "low count = " $lowCount 
+
+      $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanid + '/findings'
+      $headers2 = $headers + @{"accept" = "text/plain"}
+      write-host $findingsendpoint
+      $findings = Invoke-RestMethod  -Method GET -ContentType "application/json" -Headers $headers2  -uri $findingsendpoint
+      # Convert JSON to PowerShell object
+      #$data = $findings | ConvertFrom-Json
+      write-host ("sleep for 15 seconds")
+      Start-Sleep -Seconds 15
+
+      write-host ("Entire response:")
+      write-host $findings.items.checkClassificationName
+
+      #$data = $findings | ConvertFrom-Json
+      # Extract checkClassificationName into an array
+      #$classificationArray = $data.items | Select-Object -ExpandProperty checkClassificationName
+
+      # Output the array
+      #write-host ("list of vulnerabilities:")
+      #$classificationArray
+
+
+
       #to do: query scan result for pass/failure
       if ($status.item.criticalCount -gt 3)
       {
