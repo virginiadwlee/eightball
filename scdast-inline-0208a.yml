@@ -73,8 +73,8 @@ steps:
       $findings = Invoke-RestMethod  -Method GET -ContentType "application/json" -Headers $headers2  -uri $findingsendpoint
       # Convert JSON to PowerShell object
       #$data = $findings | ConvertFrom-Json
-      write-host ("sleep for 15 seconds")
-      Start-Sleep -Seconds 15
+      write-host ("sleep for 120 seconds")
+      Start-Sleep -Seconds 120
 
       write-host ("Entire response:")
       write-host $findings.items.checkClassificationName
