@@ -1,5 +1,4 @@
 # Starter pipeline
-
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
@@ -8,7 +7,6 @@ trigger:
 - main
 
 pool:
-
   name: Default
 
 steps:
@@ -19,8 +17,81 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
-- task: FortifyDynamicAssessment@7
+
+- task: AzureCLI@2
   inputs:
-    ScanSettings: 'zeroxss'
-    APIRoot: 'http://192.168.213.149:8083/'
-    ScanResultsLocation: 'c:\wiscanresult'
+    azureSubscription: 'Visual Studio Enterprise Subscription(1)(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      $ScanCompleted = "Complete"
+      $ScanStopped = "ScanStopped"
+      $ScanInterrupted = "Interrupted"
+      $ScanPending = "Pending"
+      $ScanQueued = "Queued"
+      $wiAPIurl = '192.168.213.150:5001'
+      
+      $headers = @{"Authorization" = "FORTIFYTOKEN N2MyMTVlYTgtOWNiYi00YzI4LTlhN2QtMWYxMTI4ZTgxYTAy"}
+      
+      $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
+       $body = '{
+      "cicdToken": "abd8a0d8-5510-427f-a3da-69a22320c3de",
+      "scannerId": 0,
+      "useAssignedScannerOnly": true,
+      
+      
+      }'
+      
+      
+      #start scan using the start-scan-cicd method
+      $response = Invoke-RestMethod  -Method POST -HEADERS $headers -ContentType "application/json" -Body $body -uri $responseurl
+      $scanid = $response.id
+      $StatusUrl = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId + '/scan-summary?includeSuppressedFindings=false'
+      
+      
+      do{
+          $status = Invoke-RestMethod  -Method GET -ContentType "application/json" -Headers $headers -uri "$StatusUrl"
+          $ScanDate =  $status[$status.Length-1].Date
+          $ScanMessage = $status[$status.Length-1].Message
+          $ScanStatus =  $status.item.scanStatusTypeDescription
+          Write-Host ($ScanDate, $ScanMessage, $ScanStatus) -Separator " - "
+      }
+      while (($ScanStatus -ne $ScanCompleted) -and ($ScanStatus -ne $ScanStopped) -and ($ScanStatus -ne $ScanInterrupted))
+      $critCount = $status.item.criticalCount
+      $highCount = $status.item.highCount
+      $mediumCount = $status.item.mediumCount
+      $lowCount = $status.item.lowCount
+
+      Write-Host "critical count = " $critCount 
+      Write-Host "high count = " $highCount 
+      Write-Host "medium count = " $mediumCount 
+      Write-Host "low count = " $lowCount 
+
+      $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanid + '/findings'
+      $headers2 = $headers + @{"accept" = "text/plain"}
+      write-host $findingsendpoint
+      $findings = Invoke-RestMethod  -Method GET -ContentType "application/json" -Headers $headers2  -uri $findingsendpoint
+      # Convert JSON to PowerShell object
+      #$data = $findings | ConvertFrom-Json
+      write-host ("sleep for 15 seconds")
+      Start-Sleep -Seconds 15
+
+      write-host ("Entire response:")
+      write-host $findings.items.checkClassificationName
+
+      #$data = $findings | ConvertFrom-Json
+      # Extract checkClassificationName into an array
+      #$classificationArray = $data.items | Select-Object -ExpandProperty checkClassificationName
+
+      # Output the array
+      #write-host ("list of vulnerabilities:")
+      #$classificationArray
+
+
+
+      #to do: query scan result for pass/failure
+      if ($status.item.criticalCount -gt 3)
+      {
+      write-host ("critical vulnerbilities found")
+      exit 1
+      }
