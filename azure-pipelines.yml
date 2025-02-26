@@ -104,10 +104,10 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       $wiAPIurl = '192.168.213.150:5001'
-      $scanId = ${env:SCANID2}
+      $scanId2 = $scanid
       $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
       $headers2 = @{"accept" = "text/plain"}
-      $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId + '/findings'
+      $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId2 + '/findings'
       write-host ("findings URL")
       write-host $findingsendpoint
       $findings = Invoke-RestMethod  -Method GET -ContentType "application/json" -Headers $headers  -uri $findingsendpoint
