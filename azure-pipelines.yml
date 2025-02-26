@@ -87,7 +87,8 @@ steps:
       #write-host ("list of vulnerabilities:")
       #$classificationArray
 
-
+      ${env:SCANID} = $scanid
+      write-host ${env:SCANID}
 
       #to do: query scan result for pass/failure
       if ($status.item.criticalCount -gt 3)
