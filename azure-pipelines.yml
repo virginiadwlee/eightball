@@ -87,8 +87,8 @@ steps:
       #write-host ("list of vulnerabilities:")
       #$classificationArray
 
-      ${env:SCANID} = $scanid
-      write-host ${env:SCANID}
+      ${env:SCANID2} = $scanid
+      write-host ${env:SCANID2}
 
       #to do: query scan result for pass/failure
       if ($status.item.criticalCount -gt 3)
@@ -96,6 +96,7 @@ steps:
       write-host ("critical vulnerbilities found")
       exit 1
       }
+
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
@@ -103,7 +104,7 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       $wiAPIurl = '192.168.213.150:5001'
-      $scanId = ${env:SCANID}
+      $scanId = ${env:SCANID2}
       $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
       $headers2 = @{"accept" = "text/plain"}
       $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId + '/findings'
