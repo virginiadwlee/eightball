@@ -96,3 +96,22 @@ steps:
       write-host ("critical vulnerbilities found")
       exit 1
       }
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      $wiAPIurl = '192.168.213.150:5001'
+      $scanId = ${env:SCANID}
+      $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
+      $headers2 = @{"accept" = "text/plain"}
+      $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId + '/findings'
+      write-host ("findings URL")
+      write-host $findingsendpoint
+      $findings = Invoke-RestMethod  -Method GET -ContentType "application/json" -Headers $headers  -uri $findingsendpoint
+      # Convert JSON to PowerShell object
+      #$data = $findings | ConvertFrom-Json
+      write-host $findings
+      write-host ("Entire response:")
+      write-host $findings.items.checkClassificationName
