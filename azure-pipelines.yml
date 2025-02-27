@@ -34,7 +34,7 @@ steps:
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
        $body = '{
-      "cicdToken": "2f4d2acb-ef12-4439-8c6c-a87d9117f5a3",
+      "cicdToken": "df1d5333-6378-4d13-8f35-a2b004e69b13",
       "scannerId": 0,
       "useAssignedScannerOnly": true,
       
