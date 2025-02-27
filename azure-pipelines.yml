@@ -95,6 +95,15 @@ steps:
       write-host ("critical vulnerbilities found")
       exit 1
       }
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      write-host "env var value"
+      write-host ${env:SCANID2}
+    powerShellErrorActionPreference: 'continue'
 
 - task: AzureCLI@2
   inputs:
@@ -104,7 +113,7 @@ steps:
     inlineScript: |
       $wiAPIurl = '192.168.213.150:5001'
       write-host ("env scanid")
-      write-host ${env:SCANID2}
+      write-host - task: AzureCLI@2
       $scanId2 = ${env:SCANID2}
       $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
       $headers2 = @{"accept" = "text/plain"}
