@@ -88,7 +88,9 @@ steps:
 
       ${env:SCANID2} = $scanid
       write-host ${env:SCANID2}
-      Write-Host "##vso[task.setvariable variable=scanId2;]$scanid2"
+      Write-Host "##vso[task.setvariable variable=scanId2]$scanid"
+      write-host "setvariable scanid2 is $(scanid2)"
+      
       #to do: query scan result for pass/failure
       if ($status.item.criticalCount -gt 3)
       {
@@ -102,7 +104,8 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       write-host "env var value"
-      write-host ${$env:SCANID2}
+      write-host ${env:SCANID2}
+      write-host $scanid2
     powerShellErrorActionPreference: 'continue'
 
 - task: AzureCLI@2
