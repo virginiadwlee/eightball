@@ -3,8 +3,6 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- main
 
 pool:
   name: Default
@@ -29,13 +27,14 @@ steps:
       $ScanInterrupted = "Interrupted"
       $ScanPending = "Pending"
       $ScanQueued = "Queued"
+      $ScanForcedComplete = "ForcedComplete"
       $wiAPIurl = '192.168.213.150:5001'
       
       $headers = @{"Authorization" = "FORTIFYTOKEN N2MyMTVlYTgtOWNiYi00YzI4LTlhN2QtMWYxMTI4ZTgxYTAy"}
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
        $body = '{
-      "cicdToken": "df1d5333-6378-4d13-8f35-a2b004e69b13",
+      "cicdToken": "2f4d2acb-ef12-4439-8c6c-a87d9117f5a3",
       "scannerId": 0,
       "useAssignedScannerOnly": true,
       
@@ -56,7 +55,7 @@ steps:
           $ScanStatus =  $status.item.scanStatusTypeDescription
           Write-Host ($ScanDate, $ScanMessage, $ScanStatus) -Separator " - "
       }
-      while (($ScanStatus -ne $ScanCompleted) -and ($ScanStatus -ne $ScanStopped) -and ($ScanStatus -ne $ScanInterrupted))
+      while (($ScanStatus -ne $ScanForcedComplete) -and ($ScanStatus -ne $ScanCompleted) -and ($ScanStatus -ne $ScanStopped) -and ($ScanStatus -ne $ScanInterrupted))
       $critCount = $status.item.criticalCount
       $highCount = $status.item.highCount
       $mediumCount = $status.item.mediumCount
@@ -104,10 +103,10 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       $wiAPIurl = '192.168.213.150:5001'
-      $scanId3 = ${env:SCANID2}
+      $scanId2 = ${env:SCANID2}
       $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
       $headers2 = @{"accept" = "text/plain"}
-      $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId3 + '/findings'
+      $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId2 + '/findings'
       write-host ("findings URL")
       write-host $findingsendpoint
       $findings = Invoke-RestMethod  -Method GET -ContentType "application/json" -Headers $headers  -uri $findingsendpoint
