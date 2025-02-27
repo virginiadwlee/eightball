@@ -88,7 +88,7 @@ steps:
 
       ${env:SCANID2} = $scanid
       write-host ${env:SCANID2}
-      Write-Host "##vso[task.setvariable variable=ScanId2;]$scanid2"
+      Write-Host "##vso[task.setvariable variable=scanId2;]$scanid2"
       #to do: query scan result for pass/failure
       if ($status.item.criticalCount -gt 3)
       {
@@ -102,7 +102,7 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       write-host "env var value"
-      write-host ${env:SCANID2}
+      write-host ${$env:SCANID2}
     powerShellErrorActionPreference: 'continue'
 
 - task: AzureCLI@2
@@ -114,7 +114,7 @@ steps:
       $wiAPIurl = '192.168.213.150:5001'
       write-host ("env scanid")
       write-host - task: AzureCLI@2
-      $scanId2 = ${env:SCANID2}
+      $scanId2 = ${$env:SCANID2}
       $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
       $headers2 = @{"accept" = "text/plain"}
       $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId2 + '/findings'
