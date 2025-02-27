@@ -88,7 +88,7 @@ steps:
 
       ${env:SCANID2} = $scanid
       write-host ${env:SCANID2}
-
+      Write-Host "##vso[task.setvariable variable=ScanId2;]$scanid2"
       #to do: query scan result for pass/failure
       if ($status.item.criticalCount -gt 3)
       {
