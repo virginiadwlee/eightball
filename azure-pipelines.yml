@@ -3,8 +3,6 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- main
 
 pool:
   name: Default
@@ -29,6 +27,7 @@ steps:
       $ScanInterrupted = "Interrupted"
       $ScanPending = "Pending"
       $ScanQueued = "Queued"
+      $ScanForcedComplete = "ForcedComplete"
       $wiAPIurl = '192.168.213.150:5001'
       
       $headers = @{"Authorization" = "FORTIFYTOKEN N2MyMTVlYTgtOWNiYi00YzI4LTlhN2QtMWYxMTI4ZTgxYTAy"}
@@ -56,7 +55,7 @@ steps:
           $ScanStatus =  $status.item.scanStatusTypeDescription
           Write-Host ($ScanDate, $ScanMessage, $ScanStatus) -Separator " - "
       }
-      while (($ScanStatus -ne $ScanCompleted) -and ($ScanStatus -ne $ScanStopped) -and ($ScanStatus -ne $ScanInterrupted))
+      while (($ScanStatus -ne $ScanForcedComplete) -and ($ScanStatus -ne $ScanCompleted) -and ($ScanStatus -ne $ScanStopped) -and ($ScanStatus -ne $ScanInterrupted))
       $critCount = $status.item.criticalCount
       $highCount = $status.item.highCount
       $mediumCount = $status.item.mediumCount
@@ -89,13 +88,25 @@ steps:
 
       ${env:SCANID2} = $scanid
       write-host ${env:SCANID2}
-
+      Write-Host "##vso[task.setvariable variable=scanId2]$scanid"
+      write-host "setvariable scanid2 is $(scanid2)"
+      
       #to do: query scan result for pass/failure
       if ($status.item.criticalCount -gt 3)
       {
       write-host ("critical vulnerbilities found")
       exit 1
       }
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      write-host "env var value"
+      write-host ${env:SCANID2}
+      write-host $scanid2
+    powerShellErrorActionPreference: 'continue'
 
 - task: AzureCLI@2
   inputs:
@@ -104,7 +115,9 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       $wiAPIurl = '192.168.213.150:5001'
-      $scanId2 = $scanid
+      write-host ("env scanid")
+      write-host - task: AzureCLI@2
+      $scanId2 = ${env:SCANID2}
       $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
       $headers2 = @{"accept" = "text/plain"}
       $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId2 + '/findings'
