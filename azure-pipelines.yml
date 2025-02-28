@@ -5,7 +5,7 @@
 
 
 pool:
-  name: Default
+  vmImage: 'ubuntu-latest'
 
 steps:
 - script: echo Hello, world!
@@ -19,7 +19,7 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'ps'
+    scriptType: 'pscore'
     scriptLocation: 'inlineScript'
     inlineScript: |
       $ScanCompleted = "Complete"
@@ -34,7 +34,7 @@ steps:
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
        $body = '{
-      "cicdToken": "2f4d2acb-ef12-4439-8c6c-a87d9117f5a3",
+      "cicdToken": "df1d5333-6378-4d13-8f35-a2b004e69b13",
       "scannerId": 0,
       "useAssignedScannerOnly": true,
       
@@ -60,12 +60,12 @@ steps:
       $highCount = $status.item.highCount
       $mediumCount = $status.item.mediumCount
       $lowCount = $status.item.lowCount
-
+      
       Write-Host "critical count = " $critCount 
       Write-Host "high count = " $highCount 
       Write-Host "medium count = " $mediumCount 
       Write-Host "low count = " $lowCount 
-
+      
       $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanid + '/findings'
       $headers2 = $headers + @{"accept" = "text/plain"}
       write-host $findingsendpoint
@@ -74,18 +74,18 @@ steps:
       #$data = $findings | ConvertFrom-Json
       write-host ("sleep for 15 seconds")
       Start-Sleep -Seconds 15
-
+      
       write-host ("Entire response:")
       write-host $findings.items.checkClassificationName
-
+      
       #$data = $findings | ConvertFrom-Json
       # Extract checkClassificationName into an array
       #$classificationArray = $data.items | Select-Object -ExpandProperty checkClassificationName
-
+      
       # Output the array
       #write-host ("list of vulnerabilities:")
       #$classificationArray
-
+      
       ${env:SCANID2} = $scanid
       write-host ${env:SCANID2}
       Write-Host "##vso[task.setvariable variable=scanId2]$scanid"
@@ -97,10 +97,12 @@ steps:
       write-host ("critical vulnerbilities found")
       exit 1
       }
+
+
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'ps'
+    scriptType: 'pscore'
     scriptLocation: 'inlineScript'
     inlineScript: |
       write-host "env var value"
@@ -111,7 +113,7 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'ps'
+    scriptType: 'pscore'
     scriptLocation: 'inlineScript'
     inlineScript: |
       $wiAPIurl = '192.168.213.150:5001'
