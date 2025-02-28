@@ -20,7 +20,7 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'pscore'
+    scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
       $ScanCompleted = "Complete"
@@ -103,7 +103,7 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'pscore'
+    scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
       write-host "env var value"
@@ -114,7 +114,7 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'pscore'
+    scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
       $wiAPIurl = '192.168.213.150:5001'
