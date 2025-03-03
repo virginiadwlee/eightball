@@ -29,13 +29,13 @@ steps:
       $ScanPending = "Pending"
       $ScanQueued = "Queued"
       $ScanForcedComplete = "ForcedComplete"
-      $wiAPIurl = '192.168.213.150:5001'
+      $wiAPIurl = ${env:WIAPIURL}
       
-      $headers = @{"Authorization" = "FORTIFYTOKEN N2MyMTVlYTgtOWNiYi00YzI4LTlhN2QtMWYxMTI4ZTgxYTAy"}
+      $headers = @{"Authorization" = ${env:FORTIFYTOKEN}}
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
        $body = '{
-      "cicdToken": "df1d5333-6378-4d13-8f35-a2b004e69b13",
+      "cicdToken": ${env:CICDTOKEN},
       "scannerId": 0,
       "useAssignedScannerOnly": true,
       
