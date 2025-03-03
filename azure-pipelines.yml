@@ -29,6 +29,10 @@ steps:
       $ScanPending = "Pending"
       $ScanQueued = "Queued"
       $ScanForcedComplete = "ForcedComplete"
+
+      write-host "wi api url "${env:WIAPIURL}
+      write-host "Fortifytoken " ${env:FORTIFYTOKEN}
+
       $wiAPIurl = ${env:WIAPIURL}
       
       $headers = @{"Authorization" = ${env:FORTIFYTOKEN}}
