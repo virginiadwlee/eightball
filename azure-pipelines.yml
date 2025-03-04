@@ -37,13 +37,14 @@ steps:
       $wiAPIurl = ${env:WIAPIURL}
       
       $headers = @{"Authorization" = "${env:FT2}"}
+      $cicdtoken = ${env:CICDTOKEN}
       #$headers = ${env:HEADERS}
       write-host "header  " $headers
       
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
        $body = '{
-      "cicdToken": "${env:CICDTOKEN}",
+      "cicdToken": "$cicdtoken",
       "scannerId": 0,
       "useAssignedScannerOnly": true,
       
