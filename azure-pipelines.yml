@@ -135,7 +135,7 @@ steps:
     scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      $wiAPIurl = '192.168.213.150:5001'
+      $wiAPIurl = ${env:WIAPIURL}
       write-host ("env scanid")
       write-host - task: AzureCLI@2
       $scanId2 = ${env:SCANID2}
