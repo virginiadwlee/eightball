@@ -32,6 +32,7 @@ steps:
 
       write-host "wi api url "${env:WIAPIURL}
       write-host "Fortifytoken " ${env:FORTIFYTOKEN}
+      write-host "cicd token  " ${env:CICDTOKEN}
 
       $wiAPIurl = ${env:WIAPIURL}
       
