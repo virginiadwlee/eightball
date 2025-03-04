@@ -45,7 +45,7 @@ steps:
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
        $body = '{
-      "cicdToken": $cicdtoken,
+      "cicdToken": "${env:CICDTOKEN}",
       "scannerId": 0,
       "useAssignedScannerOnly": true,
       
