@@ -16,7 +16,7 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
-  
+
 
 - task: AzureCLI@2
   inputs:
@@ -45,12 +45,13 @@ steps:
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
        $body = '{
-      "cicdToken": "df1d5333-6378-4d13-8f35-a2b004e69b13",
+      "cicdToken": $cicdtoken,
       "scannerId": 0,
       "useAssignedScannerOnly": true,
       
       
       }'
+      write-host "body " $body
       
       
       #start scan using the start-scan-cicd method
