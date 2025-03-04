@@ -139,7 +139,8 @@ steps:
       write-host ("env scanid")
       write-host - task: AzureCLI@2
       $scanId2 = ${env:SCANID2}
-      $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
+      #$headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
+      $headers = @{"Authorization" = "${env:FT2}"}
       $headers2 = @{"accept" = "text/plain"}
       $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId2 + '/findings'
       write-host ("findings URL")
