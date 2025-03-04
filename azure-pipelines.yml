@@ -118,16 +118,6 @@ steps:
       }
 
 
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'ps'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      write-host "env var value"
-      write-host ${env:SCANID2}
-      write-host $scanid2
-    powerShellErrorActionPreference: 'continue'
 
 - task: AzureCLI@2
   inputs:
