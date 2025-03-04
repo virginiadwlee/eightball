@@ -37,7 +37,7 @@ steps:
       $wiAPIurl = ${env:WIAPIURL}
       
       $headers = @{"Authorization" = "${env:FT2}"}
-      $cicdtoken = ${env:CICDTOKEN}
+      $cicdtoken = "${env:CICDTOKEN}"
       #$headers = ${env:HEADERS}
       write-host "header  " $headers
       
