@@ -7,20 +7,14 @@
 pool:
   name: Default
 
-
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'ps'
+    scriptType: 'pscore'
     scriptLocation: 'inlineScript'
     inlineScript: |
       $ScanCompleted = "Complete"
@@ -43,13 +37,21 @@ steps:
       
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
+       <#
        $body = '{
-      "cicdToken": "df1d5333-6378-4d13-8f35-a2b004e69b13",
+      "cicdToken": "${env:CICDTOKEN}",
       "scannerId": 0,
       "useAssignedScannerOnly": true,
       
       
       }'
+       #>
+       $body = '{
+      "cicdToken": ' + "${env:CICDTOKEN}" + ',
+            "scannerId": 0,
+      "useAssignedScannerOnly": true,
+      }'
+      write-host "body " $body
       
       
       #start scan using the start-scan-cicd method
@@ -82,11 +84,7 @@ steps:
       $findings = Invoke-RestMethod  -Method GET -ContentType "application/json" -Headers $headers2  -uri $findingsendpoint
       # Convert JSON to PowerShell object
       #$data = $findings | ConvertFrom-Json
-      write-host ("sleep for 15 seconds")
-      Start-Sleep -Seconds 15
       
-      write-host ("Entire response:")
-      write-host $findings.items.checkClassificationName
       
       #$data = $findings | ConvertFrom-Json
       # Extract checkClassificationName into an array
@@ -99,38 +97,29 @@ steps:
       ${env:SCANID2} = $scanid
       write-host ${env:SCANID2}
       Write-Host "##vso[task.setvariable variable=scanId2]$scanid"
-      write-host "setvariable scanid2 is $(scanid2)"
+      #write-host "setvariable scanid2 is $(scanid2)"
       
       #to do: query scan result for pass/failure
-      if ($status.item.criticalCount -gt 3)
+      if ($critCount -gt 3)
       {
       write-host ("critical vulnerbilities found")
       exit 1
       }
 
 
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'ps'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      write-host "env var value"
-      write-host ${env:SCANID2}
-      write-host $scanid2
-    powerShellErrorActionPreference: 'continue'
 
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'ps'
+    scriptType: 'pscore'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      $wiAPIurl = '192.168.213.150:5001'
+      $wiAPIurl = ${env:WIAPIURL}
       write-host ("env scanid")
       write-host - task: AzureCLI@2
       $scanId2 = ${env:SCANID2}
-      $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
+      #$headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
+      $headers = @{"Authorization" = "${env:FT2}"}
       $headers2 = @{"accept" = "text/plain"}
       $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId2 + '/findings'
       write-host ("findings URL")
