@@ -31,12 +31,12 @@ steps:
       $ScanForcedComplete = "ForcedComplete"
 
       write-host "wi api url "${env:WIAPIURL}
-      write-host "Fortifytoken " ${env:FORTIFYTOKEN}
+      write-host "Fortifytoken " ${env:FT2}
       write-host "cicd token  " ${env:CICDTOKEN}
 
       $wiAPIurl = ${env:WIAPIURL}
       
-      $headers = @{"Authorization" = ${env:FORTIFYTOKEN}}
+      $headers = @{"Authorization" = "${env:FT2}"}
       #$headers = ${env:HEADERS}
       write-host "header  " $headers
       
