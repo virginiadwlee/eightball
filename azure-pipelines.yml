@@ -46,6 +46,7 @@ steps:
       
       }'
       
+      write-host "URL " $responseurl
       
       #start scan using the start-scan-cicd method
       $response = Invoke-RestMethod  -Method POST -HEADERS $headers -ContentType "application/json" -Body $body -uri $responseurl
