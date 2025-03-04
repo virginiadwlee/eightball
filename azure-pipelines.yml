@@ -36,19 +36,17 @@ steps:
 
       $wiAPIurl = ${env:WIAPIURL}
       
-      #$headers = @{"Authorization" = ${env:FORTIFYTOKEN}}
       $headers = @{"Authorization" = "FORTIFYTOKEN N2MyMTVlYTgtOWNiYi00YzI4LTlhN2QtMWYxMTI4ZTgxYTAy"}
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
        $body = '{
-      #"cicdToken": ${env:CICDTOKEN},
-      "cicdToken": "2f4d2acb-ef12-4439-8c6c-a87d9117f5a3",
+      "cicdToken": "df1d5333-6378-4d13-8f35-a2b004e69b13",
+      "scannerId": 0,
       "useAssignedScannerOnly": true,
       
       
       }'
       
-      write-host "URL " $responseurl
       
       #start scan using the start-scan-cicd method
       $response = Invoke-RestMethod  -Method POST -HEADERS $headers -ContentType "application/json" -Body $body -uri $responseurl
