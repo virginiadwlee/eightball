@@ -29,18 +29,35 @@ steps:
       $ScanPending = "Pending"
       $ScanQueued = "Queued"
       $ScanForcedComplete = "ForcedComplete"
-      $wiAPIurl = '192.168.213.150:5001'
+
+      write-host "wi api url "${env:WIAPIURL}
+      write-host "Fortifytoken " ${env:FT2}
+      write-host "cicd token  " ${env:CICDTOKEN}
+
+      $wiAPIurl = ${env:WIAPIURL}
       
-      $headers = @{"Authorization" = "FORTIFYTOKEN N2MyMTVlYTgtOWNiYi00YzI4LTlhN2QtMWYxMTI4ZTgxYTAy"}
+      $headers = @{"Authorization" = "${env:FT2}"}
+      $cicdtoken = "${env:CICDTOKEN}"
+      #$headers = ${env:HEADERS}
+      write-host "header  " $headers
+      
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
+       <#
        $body = '{
-      "cicdToken": "df1d5333-6378-4d13-8f35-a2b004e69b13",
+      "cicdToken": "${env:CICDTOKEN}",
       "scannerId": 0,
       "useAssignedScannerOnly": true,
       
       
       }'
+       #>
+       $body = '{
+      "cicdToken": ' + "${env:CICDTOKEN}" + ',
+            "scannerId": 0,
+      "useAssignedScannerOnly": true,
+      }'
+      write-host "body " $body
       
       
       #start scan using the start-scan-cicd method
@@ -100,28 +117,19 @@ steps:
       }
 
 
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'pscore'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      write-host "env var value"
-      write-host ${env:SCANID2}
-      write-host $scanid2
-    powerShellErrorActionPreference: 'continue'
 
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription(5a3ddded-402a-459a-a9b2-1c1e14fa9314)'
-    scriptType: 'pscore'
+    scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      $wiAPIurl = '192.168.213.150:5001'
+      $wiAPIurl = ${env:WIAPIURL}
       write-host ("env scanid")
       write-host - task: AzureCLI@2
       $scanId2 = ${env:SCANID2}
-      $headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
+      #$headers = @{"Authorization" = "FORTIFYTOKEN NTRiNzQ0YzYtZjU5Yi00MjY1LTlmYzktZTE4NzExNmU1Zjg4"} +  @{"accept" = "text/plain"}
+      $headers = @{"Authorization" = "${env:FT2}"}
       $headers2 = @{"accept" = "text/plain"}
       $findingsendpoint = 'http://' + $wiAPIurl + '/api/v2/scans/' + $scanId2 + '/findings'
       write-host ("findings URL")
