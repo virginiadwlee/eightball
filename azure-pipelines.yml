@@ -35,7 +35,8 @@ steps:
 
       $wiAPIurl = ${env:WIAPIURL}
       
-      $headers = @{"Authorization" = ${env:FORTIFYTOKEN}}
+      #$headers = @{"Authorization" = ${env:FORTIFYTOKEN}}
+      $headers = @{"Authorization" = "FORTIFYTOKEN N2MyMTVlYTgtOWNiYi00YzI4LTlhN2QtMWYxMTI4ZTgxYTAy"}
       
       $responseurl = 'http://' + $wiAPIurl + '/api/v2/scans/start-scan-cicd'
        $body = '{
