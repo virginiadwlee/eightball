@@ -7,15 +7,9 @@
 pool:
   name: Test
 
-
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
 
 - task: AzureCLI@2
   inputs:
@@ -90,11 +84,7 @@ steps:
       $findings = Invoke-RestMethod  -Method GET -ContentType "application/json" -Headers $headers2  -uri $findingsendpoint
       # Convert JSON to PowerShell object
       #$data = $findings | ConvertFrom-Json
-      write-host ("sleep for 15 seconds")
-      Start-Sleep -Seconds 15
       
-      write-host ("Entire response:")
-      write-host $findings.items.checkClassificationName
       
       #$data = $findings | ConvertFrom-Json
       # Extract checkClassificationName into an array
@@ -107,10 +97,10 @@ steps:
       ${env:SCANID2} = $scanid
       write-host ${env:SCANID2}
       Write-Host "##vso[task.setvariable variable=scanId2]$scanid"
-      write-host "setvariable scanid2 is $(scanid2)"
+      #write-host "setvariable scanid2 is $(scanid2)"
       
       #to do: query scan result for pass/failure
-      if ($status.item.criticalCount -gt 3)
+      if ($critCount -gt 3)
       {
       write-host ("critical vulnerbilities found")
       exit 1
