@@ -36,8 +36,8 @@ steps:
 
       $wiAPIurl = ${env:WIAPIURL}
       
-      #$headers = @{"Authorization" = "FORTIFYTOKEN N2MyMTVlYTgtOWNiYi00YzI4LTlhN2QtMWYxMTI4ZTgxYTAy"}
-      $headers = ${env:HEADERS}
+      $headers = @{"Authorization" = ${env:FORTIFYTOKEN}}
+      #$headers = ${env:HEADERS}
       write-host "header  " $headers
       
       
