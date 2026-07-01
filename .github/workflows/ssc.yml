@@ -2,9 +2,9 @@
 name: Fortify SSC Scan
 on:
   push:
-    branches: [main]
+    branches: [virginiadwlee-test0701]
   pull_request:
-    branches: [main]
+    branches: [virginiadwlee-test0701]
 
 jobs:
   fortify:
