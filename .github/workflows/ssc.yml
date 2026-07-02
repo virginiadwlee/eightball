@@ -8,7 +8,7 @@ on:
 
 jobs:
   fortify:
-    runs-on: linux150
+    runs-on: self-hosted
     # permissions:               # When overriding default permissions, following are required:
     #   contents: read           # Required for checkout action
     #   security-events: write   # Required for publishing security reports to GitHub Security tab
