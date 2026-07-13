@@ -27,5 +27,10 @@ jobs:
           SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
           SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
           FCLI_BOOTSTRAP_VERSION: v3.15.0  # Centrally managed version
+          
+        with:
+           extra-args: >
+             --issue-template "Prioritized High Risk Issue Template"
+
           # SSC_APPVERSION: MyApp:main  # Optional: defaults to repo:branch
 
