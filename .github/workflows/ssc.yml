@@ -18,11 +18,14 @@ jobs:
     #  - uses: actions/setup-<build-tool>@vX  # Set up build tool(s) required to build your project
         # Bootstrap fcli, run the fcli-based Fortify CI workflow, and upload any debug artifacts
         # to GitHub artifact storage (see artifact storage section below for alternative options)
-      - uses: fortify/github-action@v3
+      
+      - uses: fortify/github-action@v3.1.0
         name: Run Fortify Scan
+        
         env:
           SSC_URL: ${{ vars.SSC_URL }}
           SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
           SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
+          FCLI_BOOTSTRAP_VERSION: v3.15.0  # Centrally managed version
           # SSC_APPVERSION: MyApp:main  # Optional: defaults to repo:branch
 
