@@ -30,7 +30,7 @@ jobs:
           
         with:
            extra-args: >
-             --issue-template "Prioritized High Risk Issue Template"
+             "--issue-template=Prioritized High Risk Issue Template"
 
           # SSC_APPVERSION: MyApp:main  # Optional: defaults to repo:branch
 
